@@ -17,13 +17,13 @@ public class CustomIAMRoleAssumptionCredentialsProvider implements com.amazonaws
 	private AWSSecurityTokenService stsClient;
 	
 	//To use in JDBC: set aws_credentials_provider_class = "com.amazonaws.custom.athena.jdbc.CustomIAMRoleAssumptionCredentialsProvider"
-    // set AwsCredentialsProviderArguments = "<accessID>,<secretKey>,<roleArn>"
-	public CustomIAMRoleAssumptionCredentialsProvider(String accessId, String secretKey, String roleArn){
+    // set AwsCredentialsProviderArguments = "<accessID>,<secretKey>,<roleArn>,<region>"
+	public CustomIAMRoleAssumptionCredentialsProvider(String accessId, String secretKey, String roleArn, String region){
 		
 		this.credentials = new BasicAWSCredentials(accessId,secretKey);
 		this.roleArn = roleArn;
 		
-		stsClient = AWSSecurityTokenServiceClientBuilder.standard().withCredentials((com.amazonaws.auth.AWSCredentialsProvider) new AWSStaticCredentialsProvider(credentials)).build();
+		stsClient = AWSSecurityTokenServiceClientBuilder.standard().withCredentials((com.amazonaws.auth.AWSCredentialsProvider) new AWSStaticCredentialsProvider(credentials)).withRegion(region).build();
 		
 		refresh();
 		
